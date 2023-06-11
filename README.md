@@ -1,3 +1,3 @@
 # Utils
 Various set of tools for students and developers. 
-Cores3.py is program in python which shows the colors of the spectrum of light, with the correspondent hexadecimal and RGB.
+Cores3.py is the file of the program COL in python which shows the colors of the spectrum of light, with the correspondent hexadecimal and RGB.
