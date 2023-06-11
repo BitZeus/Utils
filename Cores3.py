@@ -6,26 +6,19 @@ r=255      #works as pointer for red values and initial state
 g=0        #works as pointer for green values and initial state       
 b=255      #works as pointer for blue values and initial state
 
-red=[]                                  #list of red values in hexadecimal
+red=[]      #list for the values of red in hexadecimal
+green=[]    #list for the values of green in hexadecimal
+blue=[]     #list for the values of blue in hexadecimal
+
 for i in range(256):
-    redhex=hex(i).split('0x')           #convert to hexadecimal
-    redhex[1] = redhex[1].zfill(2)      #convert to 2 digits value
-    red.append(redhex[1])               #adds a new list value
+    colorvaluehex=hex(i).split('0x')                    #convert to hexadecimal
+    colorvaluehex[1] = colorvaluehex[1].zfill(2)        #convert to 2 digits value
+    red.append(colorvaluehex[1])                        #adds a new value to the red list
+    green.append(colorvaluehex[1])                      #adds a new value to the gren list
+    blue.append(colorvaluehex[1])                       #adds a new value to the blue list
     #print(red[i])
 
-green=[]                                #list of green values in hexadecimal
-for i in range(256):
-    greenhex=hex(i).split('0x')
-    greenhex[1]=greenhex[1].zfill(2)
-    green.append(greenhex[1])
-    #print(green[i])
-        
-blue=[]                                 #list of blue values in hexadecimal
-for i in range(256):
-    bluehex=hex(i).split('0x')
-    bluehex[1] = bluehex[1].zfill(2)
-    blue.append(bluehex[1])
-    #print(blue[i])
+
 
 class colors(QMainWindow):                              #creates the window for the app                 
     def __init__(self):
