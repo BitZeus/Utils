@@ -31,6 +31,8 @@ class colors(QMainWindow):                              #creates the window for 
         self.setGeometry(200,200,400,400)               #size and position of the window
         self.setWindowTitle("COL - Colors Of Light")
 
+        self.labelwavelenght = QLabel("Wave Length: ", self)
+        self.labelwavelenght.move(170,255)
         self.labelcorHex = QLabel("Cor HEX: ", self)    #title 
         self.labelcorHex.move(20,300)
         self.labelcorRGB = QLabel("Cor RGB: ", self)    #title
@@ -40,7 +42,7 @@ class colors(QMainWindow):                              #creates the window for 
         self.labelnomecorrgb = QLabel("", self)         #label which saves correspondent value in RGB of the color
         self.labelnomecorrgb.move(100,330)
         self.labelcolorcount = QLabel("", self)
-        self.labelcolorcount.move(100,360)
+        self.labelcolorcount.move(355,255)
 
         self.fundocor = QLabel("", self)
         self.fundocor.setStyleSheet("background-color: #FFFFFF;") #starts the initial color of the window as white
@@ -50,7 +52,7 @@ class colors(QMainWindow):                              #creates the window for 
         self.refreshcolor()                     #runs function 
         
     def refreshcolor(self):                    #function to refresh the color in window 
-        global r,g,b, count
+        global r,g,b, count, wavelenght
         
         cor=red[r]+green[g]+blue[b]            #creates the string for the color with the 3 values (RGB) in hexadecimal
         #print(cor, r,g,b)
@@ -61,21 +63,27 @@ class colors(QMainWindow):                              #creates the window for 
         self.labelcolorcount.setText(f"{count}")
         if r>0 and r<256 and g==0 and b==255:
             r-=1
+            self.labelwavelenght.setText("400-470nm")
             self.timer.start(100)
         elif r==0 and g>=0 and g<=254 and b==255:
             g+=1
+            self.labelwavelenght.setText("470-540nm")
             self.timer.start(100)
         elif r==0 and g==255 and b>=1 and b<256:
             b-=1
+            self.labelwavelenght.setText("540-610nm")
             self.timer.start(100)
         elif r>=0 and r<255 and g==255 and b==0:
             r+=1
+            self.labelwavelenght.setText("610-680nm")
             self.timer.start(100)
         elif r==255 and g>=1 and g<256 and b==0:
             g-=1
+            self.labelwavelenght.setText("680-750nm")
             self.timer.start(100)
         elif r>=1 and r<256 and g==0 and b==0:
             r-=1
+            self.labelwavelenght.setText("")
             self.timer.start(100)
         else:
             self.timer.stop()            
