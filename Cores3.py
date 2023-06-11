@@ -9,12 +9,13 @@ b=255      #works as pointer for blue values and initial state
 red=[]      #list for the values of red in hexadecimal
 green=[]    #list for the values of green in hexadecimal
 blue=[]     #list for the values of blue in hexadecimal
+count=0
 
 for i in range(256):
     colorvaluehex=hex(i).split('0x')                    #convert to hexadecimal
     colorvaluehex[1] = colorvaluehex[1].zfill(2)        #convert to 2 digits value
     red.append(colorvaluehex[1])                        #adds a new value to the red list
-    green.append(colorvaluehex[1])                      #adds a new value to the gren list
+    green.append(colorvaluehex[1])                      #adds a new value to the green list
     blue.append(colorvaluehex[1])                       #adds a new value to the blue list
     #print(red[i])
 
@@ -38,6 +39,8 @@ class colors(QMainWindow):                              #creates the window for 
         self.labelnomecorhex.move(100,300)
         self.labelnomecorrgb = QLabel("", self)         #label which saves correspondent value in RGB of the color
         self.labelnomecorrgb.move(100,330)
+        self.labelcolorcount = QLabel("", self)
+        self.labelcolorcount.move(100,360)
 
         self.fundocor = QLabel("", self)
         self.fundocor.setStyleSheet("background-color: #FFFFFF;") #starts the initial color of the window as white
@@ -47,13 +50,15 @@ class colors(QMainWindow):                              #creates the window for 
         self.refreshcolor()                     #runs function 
         
     def refreshcolor(self):                    #function to refresh the color in window 
-        global r,g,b
+        global r,g,b, count
         
         cor=red[r]+green[g]+blue[b]            #creates the string for the color with the 3 values (RGB) in hexadecimal
         #print(cor, r,g,b)
         self.fundocor.setStyleSheet(f"background-color: #{cor};")
         self.labelnomecorhex.setText(f"#{cor}")     
         self.labelnomecorrgb.setText(f"{r,g,b}")
+        count+=1
+        self.labelcolorcount.setText(f"{count}")
         if r>0 and r<256 and g==0 and b==255:
             r-=1
             self.timer.start(100)
@@ -62,6 +67,7 @@ class colors(QMainWindow):                              #creates the window for 
             self.timer.start(100)
         elif r==0 and g==255 and b>=1 and b<256:
             b-=1
+            self.timer.start(100)
         elif r>=0 and r<255 and g==255 and b==0:
             r+=1
             self.timer.start(100)
