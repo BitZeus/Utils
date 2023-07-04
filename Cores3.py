@@ -3,7 +3,7 @@ from PyQt5.QtCore import Qt, QTimer
 import sys
 
 r=255      #works as pointer for red values and initial state
-g=0        #works as pointer for green values and initial state       
+g=128        #works as pointer for green values and initial state       
 b=255      #works as pointer for blue values and initial state
 
 red=[]      #list for the values of red in hexadecimal
@@ -13,6 +13,7 @@ wavelenght=[]   #list for the values of wavelenght
 wave=0          #variable just for counting the time when it should step to next wavelenght value
 j=0             #works as a pointer for wavelenght[] value
 count=0         #variable to store de total of colors showed
+z=0
 
 for i in range(256):
     colorvaluehex=hex(i).split('0x')                    #convert to hexadecimal
@@ -22,7 +23,7 @@ for i in range(256):
     blue.append(colorvaluehex[1])                       #adds a new value to the blue list
     #print(red[i])
 
-for i in range(400,751):                                #fills wavelenght[] with values from 400 to 750 nm.
+for i in range(380,741):                                #fills wavelenght[] with values from 400 to 750 nm.
     wavelenght.append(i)
     
     
@@ -32,7 +33,10 @@ class colors(QMainWindow):                              #creates the window for 
         super().__init__()
 
         self.timer = QTimer(self)                       #timer to loop function refreshcolor    
-        self.timer.timeout.connect(self.refreshcolor)  
+        self.timer.timeout.connect(self.refreshcolor)
+        
+        self.timer2 = QTimer(self)                       #timer to loop function refreshcolor    
+        self.timer2.timeout.connect(self.refreshwavelenght)  
 
         self.setGeometry(200,200,400,400)               #size and position of the window
         self.setWindowTitle("COL - Colors Of Light")
@@ -58,6 +62,12 @@ class colors(QMainWindow):                              #creates the window for 
     
         self.refreshcolor()                     #runs function 
         
+    def refreshwavelenght(self):
+        global z
+        self.labelwavelenght.setText(f"{wavelenght[z]}")
+        z+=1
+        
+        
     def refreshcolor(self):                    #function to refresh the color in window 
         global r,g,b,wave,j, count, wavelenght
         
@@ -68,7 +78,63 @@ class colors(QMainWindow):                              #creates the window for 
         self.labelnomecorrgb.setText(f"{r,g,b}")
         count+=1
         self.labelcolorcount.setText(f"{count}")
-        if r>0 and r<256 and g==0 and b==255:
+        
+        conditions = [
+        (r > 0 and g>0 and b==255, 0,-1,0, 2),  #380-440 (60)
+        (r > 0 and g == 0 and b == 255, -1, 0, 0, 5.8),  #441-485 (44)
+                                                    #486-500  (14)
+        (r == 0 and g < 255 and b == 255, 0, 1, 0, 4 ), #501-565   (64) 
+        (r == 0 and g == 255 and b > 0, 0, 0, -1, 10.7) ,  #566-590    (24)
+        (r < 255 and g == 255 and b == 0, 1, 0, 0, 7.5), #591-625  (34)
+        (r == 255 and g > 0 and b == 0, 0, -1, 0, 2.2),  #626-740  (114)  
+        (r > 129 and g == 0 and b == 0, -1, 0, 0, 2),
+        ]
+
+        for cond, dr, dg, db, v in conditions:
+            if cond:
+                r, g, b = r + dr, g + dg, b + db
+                
+                self.timer.start(100)
+                print(int(v), wave, r,g,b)
+                if int(v+1)==5:
+                    if wave>5:
+                        wave+=1
+                    if wave==int(v+1):
+                        self.refreshwavelenght()
+                        wave=0
+                    wave+=1
+                elif int(v)==4:
+                    if wave>4:
+                        wave=1
+                    if wave==int(v):
+                        self.refreshwavelenght()
+                        wave=0
+                    wave+=1
+                elif int(v+1)==11:
+                    if wave>11:
+                        wave=1
+                    if wave==int(v+1):
+                        self.refreshwavelenght()
+                        wave=0
+                    wave+=1
+                elif int(v)==7:
+                    if wave>7:
+                        wave=1
+                    if wave==int(v):
+                        self.refreshwavelenght()
+                        wave=0
+                    wave+=1
+                elif int(v)==2:
+                    if wave>2:
+                        wave=1
+                    if wave==int(v):
+                        self.refreshwavelenght()
+                        wave=0
+                    wave+=1 
+                break
+            else:
+                self.timer.stop()
+        '''if r>0 and r<256 and g==0 and b==255:
             r-=1
             #self.labelwavelenght.setText("470-540nm")
             wave+=1
@@ -124,6 +190,7 @@ class colors(QMainWindow):                              #creates the window for 
                 self.labelwavelenght.setText(f"{wavelenght[j]} nm")
             self.timer.start(100)
         elif r>=1 and r<256 and g==0 and b==0:
+            print(count)
             r-=1
             wave+=1
             if wavelenght[j]<750:
@@ -138,7 +205,7 @@ class colors(QMainWindow):                              #creates the window for 
             self.timer.start(100)
         else:
             self.labelwavelenght.setText("END!")
-            self.timer.stop()            
+            self.timer.stop()  '''          
             
       
 if __name__ == '__main__':  
